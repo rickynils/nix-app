@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+
+paths="$1"
+module="$2"
+
+set -eu
+set -o pipefail
+
+if [ -z "$paths" ]; then
+  echo >&2 "No paths file specified"
+  exit 1
+fi
+
+if [ -z "$module" ]; then
+  echo >&2 "No module file specified"
+  exit 1
+fi
+
+if [ "$paths" == "-" ]; then
+  paths=""
+else
+  paths="$(readlink -m "$paths")"
+fi
+
+module="$(readlink -m "$module")"
+
+shift
+shift
+
+exec nix-exec --show-trace "$(dirname "$0")/../lib/nix-app.nix" \
+  "$paths" "$module" "$@"
