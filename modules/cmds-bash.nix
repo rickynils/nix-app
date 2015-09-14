@@ -16,7 +16,7 @@ let
     '' else ''
       echo -e "${concatStringsSep ''\n'' ss}" | \
         parallel --gnu --will-cite -j0 --ungroup -n1 --halt now,fail=1 \
-          "xargs < $ARGFILE -d '\n' bash -c '{} "$@"' --"
+          "xargs < $ARGFILE -d '\n' bash -c '{} \"\$@\"' --"
     ''
   );
 
